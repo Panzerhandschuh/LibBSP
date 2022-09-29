@@ -1,8 +1,5 @@
 ﻿#if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_5 || UNITY_5_3_OR_NEWER
 #define UNITY
-#if !UNITY_5_6_OR_NEWER
-#define OLDUNITY
-#endif
 #endif
 
 using System;
@@ -16,8 +13,14 @@ namespace LibBSP
 {
 #if UNITY
 	using Vector3 = UnityEngine.Vector3;
+#elif GODOT
+	using Vector3 = Godot.Vector3;
+#elif NEOAXIS
+	using Vector3 = NeoAxis.Vector3F;
+#else
+	using Vector3 = System.Numerics.Vector3;
 #endif
-	
+
 	public struct PlaneBSP : ILumpObject
 	{
 		public enum AxisType
