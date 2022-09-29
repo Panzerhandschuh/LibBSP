@@ -63,7 +63,7 @@ namespace LibBSP {
 		/// <summary>
 		/// Gets the Plane used by this <see cref="Node"/>.
 		/// </summary>
-		public Plane Plane {
+		public PlaneBSP Plane {
 			get {
 				return Parent.Bsp.Planes[PlaneIndex];
 			}

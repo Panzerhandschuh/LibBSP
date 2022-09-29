@@ -58,7 +58,7 @@ namespace LibBSP {
 		/// <summary>
 		/// Gets the Plane referenced by this <see cref="BrushSide"/>.
 		/// </summary>
-		public Plane Plane {
+		public PlaneBSP Plane {
 			get {
 				return Parent.Bsp.Planes[PlaneIndex];
 			}

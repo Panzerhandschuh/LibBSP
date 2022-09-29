@@ -327,24 +327,24 @@ namespace LibBSP {
 		}
 
 		/// <summary>
-		/// A <see cref="Lump{Plane}"/> of <see cref="Plane"/> objects in the BSP file, if available.
+		/// A <see cref="Lump{PlaneEx}"/> of <see cref="PlaneBSP"/> objects in the BSP file, if available.
 		/// </summary>
-		public Lump<Plane> Planes {
+		public Lump<PlaneBSP> Planes {
 			get {
-				int index = PlaneExtensions.GetIndexForLump(MapType);
+				int index = PlaneBSP.GetIndexForLump(MapType);
 
 				if (index >= 0) {
 					if (!_lumps.ContainsKey(index)) {
-						_lumps.Add(index, PlaneExtensions.LumpFactory(Reader.ReadLump(this[index]), this, this[index]));
+						_lumps.Add(index, PlaneBSP.LumpFactory(Reader.ReadLump(this[index]), this, this[index]));
 					}
 
-					return (Lump<Plane>)_lumps[index];
+					return (Lump<PlaneBSP>)_lumps[index];
 				}
 
 				return null;
 			}
 			set {
-				int index = PlaneExtensions.GetIndexForLump(MapType);
+				int index = PlaneBSP.GetIndexForLump(MapType);
 				if (index >= 0) {
 					_lumps[index] = value;
 					value.Bsp = this;
