@@ -455,6 +455,27 @@ namespace LibBSP {
 		}
 
 		/// <summary>
+		/// Gets or sets the leaf water data id for this <see cref="Leaf"/>.
+		/// </summary>
+		public short LeafWaterDataID {
+			get {
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					return BitConverter.ToInt16(Data, 28);
+				}
+
+				return 0;
+			}
+			set {
+				byte[] bytes = BitConverter.GetBytes(value);
+				
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					Data[28] = bytes[0];
+					Data[29] = bytes[1];
+				}
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets ambient water sound level for this <see cref="Leaf"/>.
 		/// </summary>
 		public byte WaterSoundLevel {
