@@ -21,10 +21,12 @@ namespace LibBSP
 	using Vector3 = System.Numerics.Vector3;
 #endif
 
-	public struct PlaneBSP : ILumpObject
-	{
-		public enum AxisType
-		{
+	/// <summary>
+	/// Holds the data used by the plane structures of all formats of BSP.
+	/// </summary>
+	public struct PlaneBSP : ILumpObject {
+		
+		public enum AxisType {
 			PlaneX = 0,
 			PlaneY = 1,
 			PlaneZ = 2,
