@@ -1579,6 +1579,117 @@ namespace LibBSP {
 		}
 
 		/// <summary>
+		/// A <see cref="Lump{LibBSP.Primitive}"/> of <see cref="Primitive"/> objects in the BSP file, if available.
+		/// </summary>
+		public Lump<Primitive> Primitives {
+			get {
+				int index = Primitive.GetIndexForLump(MapType);
+
+				if (index >= 0) {
+					if (!_lumps.ContainsKey(index)) {
+						_lumps.Add(index, Primitive.LumpFactory(Reader.ReadLump(this[index]), this, this[index]));
+					}
+
+					return (Lump<Primitive>)_lumps[index];
+				}
+
+				return null;
+			}
+			set {
+				int index = Primitive.GetIndexForLump(MapType);
+				if (index >= 0) {
+					_lumps[index] = value;
+					value.Bsp = this;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Has the <see cref="Primitive"/> lump been loaded yet?
+		/// </summary>
+		public bool PrimitivesLoaded {
+			get {
+				int index = Primitive.GetIndexForLump(MapType);
+				return LumpLoaded(index);
+			}
+		}
+
+		/// <summary>
+		/// A <see cref="Lump{Vector3}"/> of <see cref="Vector3"/> objects in the BSP file representing the primitive vertices of the BSP, if available.
+		/// </summary>
+		public Lump<Vector3> PrimitiveVertices {
+			get {
+				int index = Vector3Extensions.GetIndexForPrimitiveVerticesLump(MapType);
+
+				if (index >= 0) {
+					if (!_lumps.ContainsKey(index)) {
+						_lumps.Add(index, Vector3Extensions.LumpFactory(Reader.ReadLump(this[index]), this, this[index]));
+					}
+
+					return (Lump<Vector3>)_lumps[index];
+				}
+
+				return null;
+			}
+			set {
+				int index = Vector3Extensions.GetIndexForPrimitiveVerticesLump(MapType);
+				if (index >= 0) {
+					_lumps[index] = value;
+					value.Bsp = this;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Has the primitive vertices lump been loaded yet?
+		/// </summary>
+		public bool PrimitiveVerticesLoaded {
+			get {
+				int index = Vector3Extensions.GetIndexForPrimitiveVerticesLump(MapType);
+				return LumpLoaded(index);
+			}
+		}
+
+		/// <summary>
+		/// A <see cref="NumList"/> object containing the Primitive Indices lump, if available.
+		/// </summary>
+		public NumList PrimitiveIndices {
+			get {
+				NumList.DataType type;
+				int index = NumList.GetIndexForPrimitiveIndicesLump(MapType, out type);
+
+				if (index >= 0) {
+					if (!_lumps.ContainsKey(index)) {
+						_lumps.Add(index, NumList.LumpFactory(Reader.ReadLump(this[index]), type, this, this[index]));
+					}
+
+					return (NumList)_lumps[index];
+				}
+
+				return null;
+			}
+			set {
+				NumList.DataType type;
+				int index = NumList.GetIndexForPrimitiveIndicesLump(MapType, out type);
+				if (index >= 0) {
+					_lumps[index] = value;
+					value.Bsp = this;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Has the Primitive Indices lump been loaded yet?
+		/// </summary>
+		public bool PrimitiveIndicesLoaded {
+			get {
+				NumList.DataType type;
+				int index = NumList.GetIndexForPrimitiveIndicesLump(MapType, out type);
+				return LumpLoaded(index);
+			}
+		}
+
+		/// <summary>
 		/// The <see cref="StaticProps"/> object in the BSP file extracted from the <see cref="BSP.gameLump"/>, if available.
 		/// </summary>
 		public StaticProps StaticProps {

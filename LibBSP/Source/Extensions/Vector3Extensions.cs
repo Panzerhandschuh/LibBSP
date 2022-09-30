@@ -241,6 +241,19 @@ namespace LibBSP {
 		}
 
 		/// <summary>
+		/// Gets the index for the primitive vertex positions lump in the BSP file for a specific map format.
+		/// </summary>
+		/// <param name="type">The map type.</param>
+		/// <returns>Index for this lump, or -1 if the format doesn't have this lump.</returns>
+		public static int GetIndexForPrimitiveVerticesLump(MapType type) {
+			if (type.IsSubtypeOf(MapType.Source)) {
+				return 38;
+			}
+
+			return -1;
+		}
+
+		/// <summary>
 		/// Gets the length of the <see cref="Vector3"/> struct for the given <see cref="MapType"/> and <paramref name="version"/>.
 		/// </summary>
 		/// <param name="type">The type of BSP to get struct length for.</param>

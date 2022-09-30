@@ -76,6 +76,7 @@
     <Compile Include="Source\Structs\BSP\DisplacementVertex.cs" />
     <Compile Include="Source\Structs\BSP\Patch.cs" />
     <Compile Include="Source\Structs\BSP\PlaneBSP.cs" />
+    <Compile Include="Source\Structs\BSP\Primitive.cs" />
     <Compile Include="Source\Structs\BSP\StaticModel.cs" />
     <Compile Include="Source\Structs\BSP\StaticProp.cs" />
     <Compile Include="Source\Structs\BSP\TextureData.cs" />
