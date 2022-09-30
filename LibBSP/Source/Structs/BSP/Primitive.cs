@@ -263,7 +263,7 @@ namespace LibBSP {
 		/// <exception cref="ArgumentException">This struct is not valid or is not implemented for the given <paramref name="mapType"/> and <paramref name="lumpVersion"/>.</exception>
 		public static int GetStructLength(MapType mapType, int lumpVersion = 0) {
 			if (mapType.IsSubtypeOf(MapType.Source)) {
-				return 9;
+				return 10; // Note: This is 10 bytes instead of 9 due to data structure alignment
 			}
 
 			throw new ArgumentException("Lump object " + MethodBase.GetCurrentMethod().DeclaringType.Name + " does not exist in map type " + mapType + " or has not been implemented.");
