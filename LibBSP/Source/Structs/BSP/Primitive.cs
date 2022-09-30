@@ -138,7 +138,7 @@ namespace LibBSP {
 		public IEnumerable<Vector3> Vertices {
 			get {
 				for (int i = 0; i < VertexCount; ++i) {
-					yield return Parent.Bsp.PrimitiveVertices[FirstIndex + i];
+					yield return Parent.Bsp.PrimitiveVertices[FirstVertex + i];
 				}
 			}
 		}
