@@ -96,7 +96,7 @@ namespace LibBSP {
 		[Index("Indices")] public int FirstIndex {
 			get {
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					return BitConverter.ToUInt16(Data, 1);
+					return BitConverter.ToUInt16(Data, 2);
 				}
 
 				return -1;
@@ -105,8 +105,8 @@ namespace LibBSP {
 				byte[] bytes = BitConverter.GetBytes(value);
 
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					Data[1] = bytes[0];
-					Data[2] = bytes[1];
+					Data[2] = bytes[0];
+					Data[3] = bytes[1];
 				}
 			}
 		}
@@ -117,7 +117,7 @@ namespace LibBSP {
 		[Count("Indices")] public int IndexCount {
 			get {
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					return BitConverter.ToUInt16(Data, 3);
+					return BitConverter.ToUInt16(Data, 4);
 				}
 
 				return -1;
@@ -126,8 +126,8 @@ namespace LibBSP {
 				byte[] bytes = BitConverter.GetBytes(value);
 
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					Data[3] = bytes[0];
-					Data[4] = bytes[1];
+					Data[4] = bytes[0];
+					Data[5] = bytes[1];
 				}
 			}
 		}
@@ -149,7 +149,7 @@ namespace LibBSP {
 		[Index("Vertices")] public int FirstVertex {
 			get {
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					return BitConverter.ToUInt16(Data, 5);
+					return BitConverter.ToUInt16(Data, 6);
 				}
 
 				return -1;
@@ -158,8 +158,8 @@ namespace LibBSP {
 				byte[] bytes = BitConverter.GetBytes(value);
 
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					Data[5] = bytes[0];
-					Data[6] = bytes[1];
+					Data[6] = bytes[0];
+					Data[7] = bytes[1];
 				}
 			}
 		}
@@ -170,7 +170,7 @@ namespace LibBSP {
 		[Count("Vertices")] public int VertexCount {
 			get {
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					return BitConverter.ToUInt16(Data, 7);
+					return BitConverter.ToUInt16(Data, 8);
 				}
 
 				return -1;
@@ -179,8 +179,8 @@ namespace LibBSP {
 				byte[] bytes = BitConverter.GetBytes(value);
 
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					Data[7] = bytes[0];
-					Data[8] = bytes[1];
+					Data[8] = bytes[0];
+					Data[9] = bytes[1];
 				}
 			}
 		}
