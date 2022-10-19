@@ -867,6 +867,150 @@ namespace LibBSP {
 		}
 
 		/// <summary>
+		/// A <see cref="LibBSP.Occlusion"/> object holding occlusion data for this <see cref="BSP"/>.
+		/// </summary>
+		public Occlusion Occlusion {
+			get {
+				int index = Occlusion.GetIndexForLump(MapType);
+
+				if (index >= 0) {
+					if (!_lumps.ContainsKey(index)) {
+						_lumps.Add(index, new Occlusion(Reader.ReadLump(this[index]), this, this[index]));
+					}
+
+					return (Occlusion)_lumps[index];
+				}
+
+				return null;
+			}
+			set {
+				int index = Occlusion.GetIndexForLump(MapType);
+				if (index >= 0) {
+					_lumps[index] = value;
+					value.Bsp = this;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Has the <see cref="LibBSP.Occlusion"/> lump been loaded yet?
+		/// </summary>
+		public bool OcclusionLoaded {
+			get {
+				int index = Occlusion.GetIndexForLump(MapType);
+				return LumpLoaded(index);
+			}
+		}
+
+		/// <summary>
+		/// A <see cref="LibBSP.FaceIds"/> object holding face id data for this <see cref="BSP"/>.
+		/// </summary>
+		public FaceIds FaceIds {
+			get {
+				int index = FaceIds.GetIndexForLump(MapType);
+
+				if (index >= 0) {
+					if (!_lumps.ContainsKey(index)) {
+						_lumps.Add(index, new FaceIds(Reader.ReadLump(this[index]), this, this[index]));
+					}
+
+					return (FaceIds)_lumps[index];
+				}
+
+				return null;
+			}
+			set {
+				int index = FaceIds.GetIndexForLump(MapType);
+				if (index >= 0) {
+					_lumps[index] = value;
+					value.Bsp = this;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Has the <see cref="LibBSP.FaceIds"/> lump been loaded yet?
+		/// </summary>
+		public bool FaceIdsLoaded {
+			get {
+				int index = FaceIds.GetIndexForLump(MapType);
+				return LumpLoaded(index);
+			}
+		}
+
+		/// <summary>
+		/// A <see cref="LibBSP.Areas"/> object holding area data for this <see cref="BSP"/>.
+		/// </summary>
+		public Lump<Area> Areas {
+			get {
+				int index = Area.GetIndexForLump(MapType);
+
+				if (index >= 0) {
+					if (!_lumps.ContainsKey(index)) {
+						_lumps.Add(index, Area.LumpFactory(Reader.ReadLump(this[index]), this, this[index]));
+					}
+
+					return (Lump<Area>)_lumps[index];
+				}
+
+				return null;
+			}
+			set {
+				int index = Area.GetIndexForLump(MapType);
+				if (index >= 0) {
+					_lumps[index] = value;
+					value.Bsp = this;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Has the <see cref="LibBSP.Areas"/> lump been loaded yet?
+		/// </summary>
+		public bool AreasLoaded {
+			get {
+				int index = Area.GetIndexForLump(MapType);
+				return LumpLoaded(index);
+			}
+		}
+
+		/// <summary>
+		/// A <see cref="LibBSP.AreaPortals"/> object holding area data for this <see cref="BSP"/>.
+		/// </summary>
+		public Lump<AreaPortal> AreaPortals {
+			get {
+				int index = AreaPortal.GetIndexForLump(MapType);
+
+				if (index >= 0) {
+					if (!_lumps.ContainsKey(index)) {
+						_lumps.Add(index, AreaPortal.LumpFactory(Reader.ReadLump(this[index]), this, this[index]));
+					}
+
+					return (Lump<AreaPortal>)_lumps[index];
+				}
+
+				return null;
+			}
+			set {
+				int index = AreaPortal.GetIndexForLump(MapType);
+				if (index >= 0) {
+					_lumps[index] = value;
+					value.Bsp = this;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Has the <see cref="LibBSP.AreaPortals"/> lump been loaded yet?
+		/// </summary>
+		public bool AreaPortalsLoaded {
+			get {
+				int index = AreaPortal.GetIndexForLump(MapType);
+				return LumpLoaded(index);
+			}
+		}
+
+		/// <summary>
 		/// A <see cref="Lump{LibBSP.Face}"/> of <see cref="Face"/> objects in the BSP file representing the Original Faces, if available.
 		/// </summary>
 		public Lump<Face> OriginalFaces {

@@ -57,6 +57,8 @@
     <Compile Include="Source\Extensions\Vector4Extensions.cs" />
     <Compile Include="Source\Extensions\VertexExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\Structs\BSP\Area.cs" />
+    <Compile Include="Source\Structs\BSP\AreaPortal.cs" />
     <Compile Include="Source\Structs\BSP\Brush.cs" />
     <Compile Include="Source\Structs\BSP\BrushSide.cs" />
     <Compile Include="Source\Structs\BSP\BSP.cs" />
@@ -66,8 +68,10 @@
     <Compile Include="Source\Structs\BSP\Face.cs" />
     <Compile Include="Source\Structs\BSP\Leaf.cs" />
     <Compile Include="Source\Structs\BSP\LODTerrain.cs" />
+    <Compile Include="Source\Structs\BSP\Lumps\FaceIds.cs" />
     <Compile Include="Source\Structs\BSP\Lumps\GameLump.cs" />
     <Compile Include="Source\Structs\BSP\Lumps\Lightmaps.cs" />
+    <Compile Include="Source\Structs\BSP\Lumps\Occlusion.cs" />
     <Compile Include="Source\Structs\BSP\Lumps\StaticProps.cs" />
     <Compile Include="Source\Structs\BSP\Lumps\Textures.cs" />
     <Compile Include="Source\Structs\BSP\Model.cs" />

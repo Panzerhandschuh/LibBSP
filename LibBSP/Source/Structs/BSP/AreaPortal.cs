@@ -22,19 +22,10 @@ namespace LibBSP
 #endif
 
 	/// <summary>
-	/// Holds the data used by the plane structures of all formats of BSP.
+	/// Holds the data used by the area portal structures of all formats of BSP.
 	/// </summary>
-	public struct PlaneBSP : ILumpObject {
+	public struct AreaPortal : ILumpObject {
 		
-		public enum AxisType {
-			PlaneX = 0,
-			PlaneY = 1,
-			PlaneZ = 2,
-			PlaneAnyX = 3,
-			PlaneAnyY = 4,
-			PlaneAnyZ = 5
-		}
-
 		/// <summary>
 		/// The <see cref="ILump"/> this <see cref="ILumpObject"/> came from.
 		/// </summary>
@@ -70,39 +61,12 @@ namespace LibBSP
 		}
 
 		/// <summary>
-		/// Gets or sets the normal for this <see cref="PlaneBSP"/>.
+		/// Gets or sets the portal key for this <see cref="AreaPortal"/>.
 		/// </summary>
-		public Vector3 Normal {
-			get {
-				return Vector3Extensions.ToVector3(Data, 0);
-			}
-			set {
-				value.GetBytes().CopyTo(Data, 0);
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the distance for this <see cref="PlaneBSP"/>.
-		/// </summary>
-		public float Distance
-		{
-			get {
-				return BitConverter.ToSingle(Data, 12);
-			}
-			set {
-				byte[] bytes = BitConverter.GetBytes(value);
-				
-				bytes.CopyTo(Data, 12);
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the type for this <see cref="PlaneBSP"/>.
-		/// </summary>
-		public int Type {
+		public ushort PortalKey {
 			get {
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					return BitConverter.ToInt32(Data, 16);
+					return BitConverter.ToUInt16(Data, 0);
 				}
 
 				return 0;
@@ -111,18 +75,98 @@ namespace LibBSP
 				byte[] bytes = BitConverter.GetBytes(value);
 
 				if (MapType.IsSubtypeOf(MapType.Source)) {
-					bytes.CopyTo(Data, 16);
+					bytes.CopyTo(Data, 0);
 				}
 			}
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="PlaneBSP"/> object from a <c>byte</c> array.
+		/// Gets or sets the other area for this <see cref="AreaPortal"/>.
+		/// </summary>
+		public ushort OtherArea {
+			get {
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					return BitConverter.ToUInt16(Data, 2);
+				}
+
+				return 0;
+			}
+			set {
+				byte[] bytes = BitConverter.GetBytes(value);
+
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					bytes.CopyTo(Data, 2);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the first clip portal vertex for this <see cref="AreaPortal"/>.
+		/// </summary>
+		public ushort FirstClipPortalVertex {
+			get {
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					return BitConverter.ToUInt16(Data, 4);
+				}
+
+				return 0;
+			}
+			set {
+				byte[] bytes = BitConverter.GetBytes(value);
+
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					bytes.CopyTo(Data, 4);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the number of clip portal vertices for this <see cref="AreaPortal"/>.
+		/// </summary>
+		public ushort NumClipPortalVertices {
+			get {
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					return BitConverter.ToUInt16(Data, 6);
+				}
+
+				return 0;
+			}
+			set {
+				byte[] bytes = BitConverter.GetBytes(value);
+
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					bytes.CopyTo(Data, 6);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the plane index for this <see cref="AreaPortal"/>.
+		/// </summary>
+		public int PlaneIndex {
+			get {
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					return BitConverter.ToInt32(Data, 8);
+				}
+
+				return -1;
+			}
+			set {
+				byte[] bytes = BitConverter.GetBytes(value);
+
+				if (MapType.IsSubtypeOf(MapType.Source)) {
+					bytes.CopyTo(Data, 8);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Creates a new <see cref="AreaPortal"/> object from a <c>byte</c> array.
 		/// </summary>
 		/// <param name="data"><c>byte</c> array to parse.</param>
-		/// <param name="parent">The <see cref="ILump"/> this <see cref="PlaneBSP"/> came from.</param>
+		/// <param name="parent">The <see cref="ILump"/> this <see cref="AreaPortal"/> came from.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="data"/> was <c>null</c>.</exception>
-		public PlaneBSP(byte[] data, ILump parent = null) {
+		public AreaPortal(byte[] data, ILump parent = null) {
 			if (data == null) {
 				throw new ArgumentNullException();
 			}
@@ -132,18 +176,18 @@ namespace LibBSP
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="PlaneBSP"/> by copying the fields in <paramref name="source"/>, using
+		/// Creates a new <see cref="AreaPortal"/> by copying the fields in <paramref name="source"/>, using
 		/// <paramref name="parent"/> to get <see cref="LibBSP.MapType"/> and <see cref="LumpInfo.version"/>
-		/// to use when creating the new <see cref="PlaneBSP"/>.
+		/// to use when creating the new <see cref="AreaPortal"/>.
 		/// If the <paramref name="parent"/>'s <see cref="BSP"/>'s <see cref="LibBSP.MapType"/> is different from
 		/// the one from <paramref name="source"/>, it does not matter, because fields are copied by name.
 		/// </summary>
-		/// <param name="source">The <see cref="PlaneBSP"/> to copy.</param>
+		/// <param name="source">The <see cref="AreaPortal"/> to copy.</param>
 		/// <param name="parent">
-		/// The <see cref="ILump"/> to use as the <see cref="Parent"/> of the new <see cref="PlaneBSP"/>.
+		/// The <see cref="ILump"/> to use as the <see cref="Parent"/> of the new <see cref="AreaPortal"/>.
 		/// Use <c>null</c> to use the <paramref name="source"/>'s <see cref="Parent"/> instead.
 		/// </param>
-		public PlaneBSP(PlaneBSP source, ILump parent) {
+		public AreaPortal(AreaPortal source, ILump parent) {
 			Parent = parent;
 
 			if (parent != null && parent.Bsp != null) {
@@ -161,26 +205,28 @@ namespace LibBSP
 					Data = new byte[GetStructLength(MapType.Undefined, 0)];
 				}
 			}
-
-			Normal = source.Normal;
-			Distance = source.Distance;
-			Type = source.Type;
+			
+			PortalKey = source.PortalKey;
+			OtherArea = source.OtherArea;
+			FirstClipPortalVertex = source.FirstClipPortalVertex;
+			NumClipPortalVertices = source.NumClipPortalVertices;
+			PlaneIndex = source.PlaneIndex;
 		}
 
 		/// <summary>
-		/// Factory method to parse a <c>byte</c> array into a <see cref="Lump{PlaneEx}"/>.
+		/// Factory method to parse a <c>byte</c> array into a <see cref="Lump{AreaPortal}"/>.
 		/// </summary>
 		/// <param name="data">The data to parse.</param>
 		/// <param name="bsp">The <see cref="BSP"/> this lump came from.</param>
 		/// <param name="lumpInfo">The <see cref="LumpInfo"/> associated with this lump.</param>
 		/// <returns>A <see cref="Lump{PlaneEx}"/>.</returns>
 		/// <exception cref="ArgumentNullException"><paramref name="data"/> parameter was <c>null</c>.</exception>
-		public static Lump<PlaneBSP> LumpFactory(byte[] data, BSP bsp, LumpInfo lumpInfo) {
+		public static Lump<AreaPortal> LumpFactory(byte[] data, BSP bsp, LumpInfo lumpInfo) {
 			if (data == null) {
 				throw new ArgumentNullException();
 			}
 
-			return new Lump<PlaneBSP>(data, GetStructLength(bsp.MapType, lumpInfo.version), bsp, lumpInfo);
+			return new Lump<AreaPortal>(data, GetStructLength(bsp.MapType, lumpInfo.version), bsp, lumpInfo);
 		}
 
 		/// <summary>
@@ -191,10 +237,8 @@ namespace LibBSP
 		/// <returns>The length, in <c>byte</c>s, of this struct.</returns>
 		/// <exception cref="ArgumentException">This struct is not valid or is not implemented for the given <paramref name="mapType"/> and <paramref name="lumpVersion"/>.</exception>
 		public static int GetStructLength(MapType mapType, int lumpVersion = 0) {
-			if (mapType.IsSubtypeOf(MapType.Quake3)) {
-				return 16;
-			} else if (mapType.IsSubtypeOf(MapType.Source)) {
-				return 20;
+			if (mapType.IsSubtypeOf(MapType.Source)) {
+				return 12;
 			}
 
 			throw new ArgumentException("Lump object " + MethodBase.GetCurrentMethod().DeclaringType.Name + " does not exist in map type " + mapType + " or has not been implemented.");
@@ -206,19 +250,8 @@ namespace LibBSP
 		/// <param name="type">The map type.</param>
 		/// <returns>Index for this lump, or -1 if the format doesn't have this lump or it's not implemented.</returns>
 		public static int GetIndexForLump(MapType type) {
-			if (type == MapType.BlueShift) {
-				return 0;
-			} else if (type.IsSubtypeOf(MapType.Source)
-				|| type.IsSubtypeOf(MapType.Quake)
-				|| type.IsSubtypeOf(MapType.Quake2)
-				|| type.IsSubtypeOf(MapType.UberTools)
-				|| type == MapType.Nightfire) {
-				return 1;
-			} else if (type == MapType.CoD2
-				|| type == MapType.CoD4) {
-				return 4;
-			} else if (type.IsSubtypeOf(MapType.Quake3)) {
-				return 2;
+			if (type.IsSubtypeOf(MapType.Source)) {
+				return 21;
 			}
 
 			return -1;
