@@ -1859,6 +1859,42 @@ namespace LibBSP {
 		}
 
 		/// <summary>
+		/// A <see cref="LibBSP.PakFile"/> object holding pak file data for this <see cref="BSP"/>.
+		/// </summary>
+		public PakFile PakFile {
+			get {
+				int index = PakFile.GetIndexForLump(MapType);
+
+				if (index >= 0) {
+					if (!_lumps.ContainsKey(index)) {
+						_lumps.Add(index, new PakFile(Reader.ReadLump(this[index]), this, this[index]));
+					}
+
+					return (PakFile)_lumps[index];
+				}
+
+				return null;
+			}
+			set {
+				int index = PakFile.GetIndexForLump(MapType);
+				if (index >= 0) {
+					_lumps[index] = value;
+					value.Bsp = this;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Has the <see cref="LibBSP.PakFile"/> lump been loaded yet?
+		/// </summary>
+		public bool PakFileLoaded {
+			get {
+				int index = PakFile.GetIndexForLump(MapType);
+				return LumpLoaded(index);
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the name of this map.
 		/// </summary>
 		public string MapName { get; set; }
