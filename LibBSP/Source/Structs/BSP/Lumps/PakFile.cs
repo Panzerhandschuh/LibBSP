@@ -72,9 +72,12 @@ namespace LibBSP {
 			return Data;
 		}
 
+		public ZipArchive GetZipArchive() {
+			return ZipArchive.Open(new MemoryStream(Data));
+		}
+
 		public void SetZipArchive(ZipArchive zip, bool compress) {
-			using (var stream = new MemoryStream())
-			{
+			using (var stream = new MemoryStream()) {
 				var compressionType = compress ? CompressionType.LZMA : CompressionType.None;
 				zip.SaveTo(stream, new SharpCompress.Writers.WriterOptions(compressionType));
 				Data = stream.ToArray();
