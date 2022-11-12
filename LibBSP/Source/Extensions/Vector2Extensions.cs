@@ -134,6 +134,18 @@ namespace LibBSP {
 		}
 
 		/// <summary>
+		/// Gets a <c>byte</c> array representing the components of this <see cref="Vector2"/> as <c>int</c>s.
+		/// </summary>
+		/// <param name="vector">This <see cref="Vector2"/>.</param>
+		/// <returns><c>byte</c> array with the components' bytes.</returns>
+		public static byte[] GetIntBytes(this Vector2 vector) {
+			byte[] ret = new byte[8];
+			BitConverter.GetBytes((int)vector.X()).CopyTo(ret, 0);
+			BitConverter.GetBytes((int)vector.Y()).CopyTo(ret, 4);
+			return ret;
+		}
+
+		/// <summary>
 		/// Returns a <see cref="Vector2"/> converted from eight bytes at a specified position in a byte array.
 		/// </summary>
 		/// <param name="value">An array of bytes.</param>

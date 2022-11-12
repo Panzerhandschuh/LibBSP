@@ -38,6 +38,15 @@ namespace LibBSP {
 	using Plane = System.Numerics.Plane;
 #endif
 
+	public enum FaceType
+	{
+		Invalid = 0,
+		Polygon = 1,
+		Patch = 2,
+		Mesh = 3,
+		Billboard = 4
+	}
+
 	/// <summary>
 	/// Holds all the data for a face in a BSP map.
 	/// </summary>
@@ -596,18 +605,18 @@ namespace LibBSP {
 		/// <summary>
 		/// Gets or sets the type (flags) of this face.
 		/// </summary>
-		public int Type {
+		public FaceType Type {
 			get {
 				if (MapType.IsSubtypeOf(MapType.Quake3) && !MapType.IsSubtypeOf(MapType.CoD)) {
-					return BitConverter.ToInt32(Data, 8);
+					return (FaceType)BitConverter.ToInt32(Data, 8);
 				} else if (MapType == MapType.Nightfire) {
-					return BitConverter.ToInt32(Data, 20);
+					return (FaceType)BitConverter.ToInt32(Data, 20);
 				}
 
-				return -1;
+				return FaceType.Invalid;
 			}
 			set {
-				byte[] bytes = BitConverter.GetBytes(value);
+				byte[] bytes = BitConverter.GetBytes((int)value);
 
 				if (MapType.IsSubtypeOf(MapType.Quake3) && !MapType.IsSubtypeOf(MapType.CoD)) {
 					bytes.CopyTo(Data, 8);
@@ -1030,18 +1039,18 @@ namespace LibBSP {
 			set {
 				if (MapType == MapType.Vindictus) {
 					if (LumpVersion == 2) {
-						value.GetBytes().CopyTo(Data, 44);
+						value.GetIntBytes().CopyTo(Data, 44);
 					} else {
-						value.GetBytes().CopyTo(Data, 40);
+						value.GetIntBytes().CopyTo(Data, 40);
 					}
 				} else if (MapType == MapType.Raven) {
-					value.GetBytes().CopyTo(Data, 52);
+					value.GetIntBytes().CopyTo(Data, 52);
 				} else if (MapType == MapType.Source17) {
-					value.GetBytes().CopyTo(Data, 80);
+					value.GetIntBytes().CopyTo(Data, 80);
 				} else if (MapType.IsSubtypeOf(MapType.Quake3) && !MapType.IsSubtypeOf(MapType.CoD)) {
-					value.GetBytes().CopyTo(Data, 32);
+					value.GetIntBytes().CopyTo(Data, 32);
 				} else if (MapType.IsSubtypeOf(MapType.Source)) {
-					value.GetBytes().CopyTo(Data, 28);
+					value.GetIntBytes().CopyTo(Data, 28);
 				}
 			}
 		}
@@ -1059,7 +1068,7 @@ namespace LibBSP {
 			}
 			set {
 				if (MapType == MapType.Raven) {
-					value.GetBytes().CopyTo(Data, 60);
+					value.GetIntBytes().CopyTo(Data, 60);
 				}
 			}
 		}
@@ -1077,7 +1086,7 @@ namespace LibBSP {
 			}
 			set {
 				if (MapType == MapType.Raven) {
-					value.GetBytes().CopyTo(Data, 68);
+					value.GetIntBytes().CopyTo(Data, 68);
 				}
 			}
 		}
@@ -1095,7 +1104,7 @@ namespace LibBSP {
 			}
 			set {
 				if (MapType == MapType.Raven) {
-					value.GetBytes().CopyTo(Data, 76);
+					value.GetIntBytes().CopyTo(Data, 76);
 				}
 			}
 		}
@@ -1126,18 +1135,18 @@ namespace LibBSP {
 			set {
 				if (MapType == MapType.Vindictus) {
 					if (LumpVersion == 2) {
-						value.GetBytes().CopyTo(Data, 52);
+						value.GetIntBytes().CopyTo(Data, 52);
 					} else {
-						value.GetBytes().CopyTo(Data, 48);
+						value.GetIntBytes().CopyTo(Data, 48);
 					}
 				} else if (MapType == MapType.Raven) {
-					value.GetBytes().CopyTo(Data, 84);
+					value.GetIntBytes().CopyTo(Data, 84);
 				} else if (MapType == MapType.Source17) {
-					value.GetBytes().CopyTo(Data, 88);
+					value.GetIntBytes().CopyTo(Data, 88);
 				} else if (MapType.IsSubtypeOf(MapType.Quake3) && !MapType.IsSubtypeOf(MapType.CoD)) {
-					value.GetBytes().CopyTo(Data, 40);
+					value.GetIntBytes().CopyTo(Data, 40);
 				} else if (MapType.IsSubtypeOf(MapType.Source)) {
-					value.GetBytes().CopyTo(Data, 36);
+					value.GetIntBytes().CopyTo(Data, 36);
 				}
 			}
 		}
@@ -1245,9 +1254,9 @@ namespace LibBSP {
 			}
 			set {
 				if (MapType == MapType.Raven) {
-					value.GetBytes().CopyTo(Data, 140);
+					value.GetIntBytes().CopyTo(Data, 140);
 				} else if (MapType.IsSubtypeOf(MapType.Quake3) && !MapType.IsSubtypeOf(MapType.CoD)) {
-					value.GetBytes().CopyTo(Data, 96);
+					value.GetIntBytes().CopyTo(Data, 96);
 				}
 			}
 		}
