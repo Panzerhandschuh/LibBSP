@@ -487,6 +487,12 @@ namespace LibBSP {
 					BitConverter.GetBytes(23).CopyTo(bytes, 4);
 					return bytes;
 				}
+				case MapType.Source25: {
+					byte[] bytes = new byte[8];
+					BitConverter.GetBytes(VBSPHeader).CopyTo(bytes, 0);
+					BitConverter.GetBytes(25).CopyTo(bytes, 4);
+					return bytes;
+				}
 				case MapType.Source27: {
 					byte[] bytes = new byte[8];
 					BitConverter.GetBytes(VBSPHeader).CopyTo(bytes, 0);

@@ -160,7 +160,8 @@ namespace LibBSP {
 			if (version == MapType.Nightfire) {
 				dataType = DataType.UInt32;
 				return 12;
-			} else if (version == MapType.Vindictus) {
+			} else if (version == MapType.Vindictus
+				|| version == MapType.Source25) {
 				dataType = DataType.UInt32;
 				return 16;
 			} else if (version.IsSubtypeOf(MapType.Quake)) {
@@ -228,7 +229,8 @@ namespace LibBSP {
 			} else if (version.IsSubtypeOf(MapType.Quake2)) {
 				dataType = DataType.UInt16;
 				return 10;
-			} else if (version == MapType.Vindictus) {
+			} else if (version == MapType.Vindictus
+				|| version == MapType.Source25) {
 				dataType = DataType.UInt32;
 				return 17;
 			} else if (version == MapType.CoD
@@ -283,6 +285,12 @@ namespace LibBSP {
 			} else if (version.IsSubtypeOf(MapType.Quake3)) {
 				dataType = DataType.UInt32;
 				return 11;
+			} else if (version == MapType.Source25) {
+				dataType = DataType.UInt32;
+				return 31;
+			} else if (version.IsSubtypeOf(MapType.Source)) {
+				dataType = DataType.UInt16;
+				return 31;
 			}
 
 			dataType = DataType.Invalid;
@@ -383,7 +391,10 @@ namespace LibBSP {
 		/// <returns>Index for this lump, or -1 if the format doesn't have this lump or it's not implemented.</returns>
 		public static int GetIndexForPrimitiveIndicesLump(MapType version, out DataType dataType)
 		{
-			if (version.IsSubtypeOf(MapType.Source)) {
+			if (version == MapType.Source25) {
+				dataType = DataType.UInt32;
+				return 39;
+			} else if (version.IsSubtypeOf(MapType.Source)) {
 				dataType = DataType.UInt16;
 				return 39;
 			}

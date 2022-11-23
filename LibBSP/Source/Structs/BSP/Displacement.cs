@@ -239,7 +239,8 @@ namespace LibBSP {
 		/// </summary>
 		public int FaceIndex {
 			get {
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					return BitConverter.ToInt32(Data, 36);
 				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToUInt16(Data, 36);
@@ -250,7 +251,8 @@ namespace LibBSP {
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					bytes.CopyTo(Data, 36);
 				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					Data[36] = bytes[0];
@@ -301,7 +303,8 @@ namespace LibBSP {
 				uint[] allowedVertices = new uint[10];
 				int offset = -1;
 
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					offset = 192;
 				} else if (MapType == MapType.Source22) {
 					offset = 140;
@@ -324,7 +327,8 @@ namespace LibBSP {
 				}
 				int offset = -1;
 
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					offset = 192;
 				} else if (MapType == MapType.Source22) {
 					offset = 140;
@@ -448,7 +452,8 @@ namespace LibBSP {
 		public static int GetStructLength(MapType mapType, int lumpVersion = 0) {
 			if (mapType == MapType.Source23) {
 				return 184;
-			} else if (mapType == MapType.Vindictus) {
+			} else if (mapType == MapType.Vindictus
+				|| mapType == MapType.Source25) {
 				return 232;
 			} else if (mapType.IsSubtypeOf(MapType.Source)) {
 				return 176;
@@ -558,14 +563,19 @@ namespace LibBSP {
 				/// </summary>
 				public int NeighborIndex {
 					get {
-						if (parent.MapType.IsSubtypeOf(MapType.Source)) {
+						if (parent.MapType == MapType.Source25) {
+							return BitConverter.ToInt32(parent.Data, offset);
+						} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 							return BitConverter.ToInt16(parent.Data, offset);
 						}
 
 						return -1;
 					}
 					set {
-						if (parent.MapType.IsSubtypeOf(MapType.Source)) {
+						if (parent.MapType == MapType.Source25) {
+							byte[] bytes = BitConverter.GetBytes(value);
+							bytes.CopyTo(parent.Data, offset);
+						} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 							byte[] bytes = BitConverter.GetBytes(value);
 							parent.Data[offset] = bytes[0];
 							parent.Data[offset + 1] = bytes[1];
@@ -580,6 +590,8 @@ namespace LibBSP {
 					get {
 						if (parent.MapType == MapType.Vindictus) {
 							return BitConverter.ToInt16(parent.Data, offset + 2);
+						} else if (parent.MapType == MapType.Source25) {
+							return parent.Data[offset + 4];
 						} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 							return parent.Data[offset + 2];
 						}
@@ -592,6 +604,8 @@ namespace LibBSP {
 						if (parent.MapType == MapType.Vindictus) {
 							parent.Data[offset + 2] = bytes[0];
 							parent.Data[offset + 3] = bytes[1];
+						} else if (parent.MapType == MapType.Source25) {
+							parent.Data[offset + 4] = bytes[0];
 						} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 							parent.Data[offset + 2] = bytes[0];
 						}
@@ -605,6 +619,8 @@ namespace LibBSP {
 					get {
 						if (parent.MapType == MapType.Vindictus) {
 							return BitConverter.ToInt16(parent.Data, offset + 4);
+						} else if (parent.MapType == MapType.Source25) {
+							return parent.Data[offset + 5];
 						} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 							return parent.Data[offset + 3];
 						}
@@ -617,6 +633,8 @@ namespace LibBSP {
 						if (parent.MapType == MapType.Vindictus) {
 							parent.Data[offset + 4] = bytes[0];
 							parent.Data[offset + 5] = bytes[1];
+						} else if (parent.MapType == MapType.Source25) {
+							parent.Data[offset + 5] = bytes[0];
 						} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 							parent.Data[offset + 3] = bytes[0];
 						}
@@ -630,6 +648,8 @@ namespace LibBSP {
 					get {
 						if (parent.MapType == MapType.Vindictus) {
 							return BitConverter.ToInt16(parent.Data, offset + 6);
+						} else if (parent.MapType == MapType.Source25) {
+							return parent.Data[offset + 6];
 						} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 							return parent.Data[offset + 4];
 						}
@@ -642,6 +662,8 @@ namespace LibBSP {
 						if (parent.MapType == MapType.Vindictus) {
 							parent.Data[offset + 6] = bytes[0];
 							parent.Data[offset + 7] = bytes[1];
+						} else if (parent.MapType == MapType.Source25) {
+							parent.Data[offset + 6] = bytes[0];
 						} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 							parent.Data[offset + 4] = bytes[0];
 						}
@@ -691,7 +713,8 @@ namespace LibBSP {
 				/// <returns>The length, in <c>byte</c>s, of this struct.</returns>
 				/// <exception cref="ArgumentException">This struct is not valid or is not implemented for the given <paramref name="mapType"/> and <paramref name="lumpVersion"/>.</exception>
 				public static int GetStructLength(MapType mapType, int lumpVersion = 0) {
-					if (mapType == MapType.Vindictus) {
+					if (mapType == MapType.Vindictus
+						|| mapType == MapType.Source25) {
 						return 8;
 					} else if (mapType.IsSubtypeOf(MapType.Source)) {
 						return 6;
@@ -726,7 +749,8 @@ namespace LibBSP {
 				get {
 					int[] neighborIndices = new int[10];
 
-					if (parent.MapType == MapType.Vindictus) {
+					if (parent.MapType == MapType.Vindictus
+						|| parent.MapType == MapType.Source25) {
 						for (int i = 0; i < 4; ++i) {
 							neighborIndices[i] = BitConverter.ToInt32(parent.Data, offset + (i * 4));
 						}
@@ -743,7 +767,8 @@ namespace LibBSP {
 						throw new ArgumentException("NeighborIndices array must have 4 elements.");
 					}
 
-					if (parent.MapType == MapType.Vindictus) {
+					if (parent.MapType == MapType.Vindictus
+						|| parent.MapType == MapType.Source25) {
 						for (int i = 0; i < value.Length; ++i) {
 							BitConverter.GetBytes(value[i]).CopyTo(parent.Data, offset + (i * 4));
 						}
@@ -764,6 +789,8 @@ namespace LibBSP {
 				get {
 					if (parent.MapType == MapType.Vindictus) {
 						return BitConverter.ToInt32(parent.Data, offset + 16);
+					} else if (parent.MapType == MapType.Source25) {
+						return parent.Data[offset + 16];
 					} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 						return parent.Data[offset + 8];
 					}
@@ -775,6 +802,8 @@ namespace LibBSP {
 
 					if (parent.MapType == MapType.Vindictus) {
 						BitConverter.GetBytes(value).CopyTo(parent.Data, offset + 16);
+					} else if (parent.MapType == MapType.Source25) {
+						parent.Data[offset + 16] = bytes[0];
 					} else if (parent.MapType.IsSubtypeOf(MapType.Source)) {
 						parent.Data[offset + 8] = bytes[0];
 					}
@@ -822,7 +851,8 @@ namespace LibBSP {
 			/// <returns>The length, in <c>byte</c>s, of this struct.</returns>
 			/// <exception cref="ArgumentException">This struct is not valid or is not implemented for the given <paramref name="mapType"/> and <paramref name="lumpVersion"/>.</exception>
 			public static int GetStructLength(MapType mapType, int lumpVersion = 0) {
-				if (mapType == MapType.Vindictus) {
+				if (mapType == MapType.Vindictus
+					|| mapType == MapType.Source25) {
 					return 20;
 				} else if (mapType.IsSubtypeOf(MapType.Source)) {
 					return 10;

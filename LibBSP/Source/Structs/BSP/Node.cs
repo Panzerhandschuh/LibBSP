@@ -179,6 +179,8 @@ namespace LibBSP {
 				} else if (MapType.IsSubtypeOf(MapType.Quake3)
 					|| MapType == MapType.Vindictus) {
 					return new Vector3(BitConverter.ToInt32(Data, 12), BitConverter.ToInt32(Data, 16), BitConverter.ToInt32(Data, 20));
+				} else if (MapType == MapType.Source25) {
+					return new Vector3(BitConverter.ToSingle(Data, 12), BitConverter.ToSingle(Data, 16), BitConverter.ToSingle(Data, 20));
 				} else if (MapType.IsSubtypeOf(MapType.Source)
 					|| MapType.IsSubtypeOf(MapType.Quake2)) {
 					return new Vector3(BitConverter.ToInt16(Data, 12), BitConverter.ToInt16(Data, 14), BitConverter.ToInt16(Data, 16));
@@ -198,6 +200,10 @@ namespace LibBSP {
 					BitConverter.GetBytes((int)value.X()).CopyTo(Data, 12);
 					BitConverter.GetBytes((int)value.Y()).CopyTo(Data, 16);
 					BitConverter.GetBytes((int)value.Z()).CopyTo(Data, 20);
+				} else if (MapType == MapType.Source25) {
+					BitConverter.GetBytes(value.X()).CopyTo(Data, 12);
+					BitConverter.GetBytes(value.Y()).CopyTo(Data, 16);
+					BitConverter.GetBytes(value.Z()).CopyTo(Data, 20);
 				} else if (MapType.IsSubtypeOf(MapType.Source)
 					|| MapType.IsSubtypeOf(MapType.Quake2)) {
 					BitConverter.GetBytes((short)value.X()).CopyTo(Data, 12);
@@ -219,6 +225,8 @@ namespace LibBSP {
 				} else if (MapType.IsSubtypeOf(MapType.Quake3)
 					|| MapType == MapType.Vindictus) {
 					return new Vector3(BitConverter.ToInt32(Data, 24), BitConverter.ToInt32(Data, 28), BitConverter.ToInt32(Data, 32));
+				} else if (MapType == MapType.Source25) {
+					return new Vector3(BitConverter.ToSingle(Data, 24), BitConverter.ToSingle(Data, 28), BitConverter.ToSingle(Data, 32));
 				} else if (MapType.IsSubtypeOf(MapType.Source)
 					|| MapType.IsSubtypeOf(MapType.Quake2)) {
 					return new Vector3(BitConverter.ToInt16(Data, 18), BitConverter.ToInt16(Data, 20), BitConverter.ToInt16(Data, 22));
@@ -238,6 +246,10 @@ namespace LibBSP {
 					BitConverter.GetBytes((short)value.X()).CopyTo(Data, 24);
 					BitConverter.GetBytes((short)value.Y()).CopyTo(Data, 28);
 					BitConverter.GetBytes((short)value.Z()).CopyTo(Data, 32);
+				} else if (MapType == MapType.Source25) {
+					BitConverter.GetBytes(value.X()).CopyTo(Data, 24);
+					BitConverter.GetBytes(value.Y()).CopyTo(Data, 28);
+					BitConverter.GetBytes(value.Z()).CopyTo(Data, 32);
 				} else if (MapType.IsSubtypeOf(MapType.Source)
 					|| MapType.IsSubtypeOf(MapType.Quake2)) {
 					BitConverter.GetBytes((short)value.X()).CopyTo(Data, 18);
@@ -268,7 +280,8 @@ namespace LibBSP {
 			get {
 				if (MapType.IsSubtypeOf(MapType.Quake)) {
 					return BitConverter.ToUInt16(Data, 20);
-				} else if (MapType == MapType.Vindictus) {
+				} else if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					return BitConverter.ToInt32(Data, 36);
 				} else if (MapType.IsSubtypeOf(MapType.Quake2)
 					|| MapType.IsSubtypeOf(MapType.Source)) {
@@ -283,7 +296,8 @@ namespace LibBSP {
 				if (MapType.IsSubtypeOf(MapType.Quake)) {
 					Data[20] = bytes[0];
 					Data[21] = bytes[1];
-				} else if (MapType == MapType.Vindictus) {
+				} else if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					bytes.CopyTo(Data, 36);
 				} else if (MapType.IsSubtypeOf(MapType.Quake2)
 					|| MapType.IsSubtypeOf(MapType.Source)) {
@@ -301,7 +315,8 @@ namespace LibBSP {
 			get {
 				if (MapType.IsSubtypeOf(MapType.Quake)) {
 					return BitConverter.ToUInt16(Data, 22);
-				} else if (MapType == MapType.Vindictus) {
+				} else if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					return BitConverter.ToInt32(Data, 40);
 				} else if (MapType.IsSubtypeOf(MapType.Quake2)
 					|| MapType.IsSubtypeOf(MapType.Source)) {
@@ -316,7 +331,8 @@ namespace LibBSP {
 				if (MapType.IsSubtypeOf(MapType.Quake)) {
 					Data[22] = bytes[0];
 					Data[23] = bytes[1];
-				} else if (MapType == MapType.Vindictus) {
+				} else if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					bytes.CopyTo(Data, 40);
 				} else if (MapType.IsSubtypeOf(MapType.Quake2)
 					|| MapType.IsSubtypeOf(MapType.Source)) {
@@ -331,7 +347,9 @@ namespace LibBSP {
 		/// </summary>
 		public int AreaIndex {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source) && MapType != MapType.Vindictus) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToUInt16(Data, 44);
+				} else if (MapType.IsSubtypeOf(MapType.Source) && MapType != MapType.Vindictus) {
 					return BitConverter.ToUInt16(Data, 28);
 				}
 
@@ -340,7 +358,9 @@ namespace LibBSP {
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source) && MapType != MapType.Vindictus) {
+				if (MapType == MapType.Source25) {
+					bytes.CopyTo(Data, 44);
+				} else if (MapType.IsSubtypeOf(MapType.Source) && MapType != MapType.Vindictus) {
 					Data[28] = bytes[0];
 					Data[29] = bytes[1];
 				}
@@ -431,7 +451,8 @@ namespace LibBSP {
 				return 24;
 			} else if (mapType.IsSubtypeOf(MapType.Quake2)) {
 				return 28;
-			} else if (mapType == MapType.Vindictus) {
+			} else if (mapType == MapType.Vindictus
+				|| mapType == MapType.Source25) {
 				return 48;
 			} else if (mapType.IsSubtypeOf(MapType.Source)) {
 				return 32;

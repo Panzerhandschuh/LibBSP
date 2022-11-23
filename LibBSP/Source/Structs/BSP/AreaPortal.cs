@@ -63,9 +63,11 @@ namespace LibBSP
 		/// <summary>
 		/// Gets or sets the portal key for this <see cref="AreaPortal"/>.
 		/// </summary>
-		public ushort PortalKey {
+		public uint PortalKey {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToUInt32(Data, 0);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToUInt16(Data, 0);
 				}
 
@@ -74,8 +76,11 @@ namespace LibBSP
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
 					bytes.CopyTo(Data, 0);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
+					Data[0] = bytes[0];
+					Data[1] = bytes[1];
 				}
 			}
 		}
@@ -83,9 +88,11 @@ namespace LibBSP
 		/// <summary>
 		/// Gets or sets the other area for this <see cref="AreaPortal"/>.
 		/// </summary>
-		public ushort OtherArea {
+		public uint OtherArea {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToUInt32(Data, 4);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToUInt16(Data, 2);
 				}
 
@@ -94,8 +101,11 @@ namespace LibBSP
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source)) {
-					bytes.CopyTo(Data, 2);
+				if (MapType == MapType.Source25) {
+					bytes.CopyTo(Data, 4);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
+					Data[2] = bytes[0];
+					Data[3] = bytes[1];
 				}
 			}
 		}
@@ -103,9 +113,11 @@ namespace LibBSP
 		/// <summary>
 		/// Gets or sets the first clip portal vertex for this <see cref="AreaPortal"/>.
 		/// </summary>
-		public ushort FirstClipPortalVertex {
+		public uint FirstClipPortalVertex {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToUInt32(Data, 8);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToUInt16(Data, 4);
 				}
 
@@ -114,8 +126,11 @@ namespace LibBSP
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source)) {
-					bytes.CopyTo(Data, 4);
+				if (MapType == MapType.Source25) {
+					bytes.CopyTo(Data, 8);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
+					Data[4] = bytes[0];
+					Data[5] = bytes[1];
 				}
 			}
 		}
@@ -123,9 +138,11 @@ namespace LibBSP
 		/// <summary>
 		/// Gets or sets the number of clip portal vertices for this <see cref="AreaPortal"/>.
 		/// </summary>
-		public ushort NumClipPortalVertices {
+		public uint NumClipPortalVertices {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToUInt32(Data, 12);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToUInt16(Data, 6);
 				}
 
@@ -134,8 +151,11 @@ namespace LibBSP
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source)) {
-					bytes.CopyTo(Data, 6);
+				if (MapType == MapType.Source25) {
+					bytes.CopyTo(Data, 12);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
+					Data[6] = bytes[0];
+					Data[7] = bytes[1];
 				}
 			}
 		}
@@ -145,7 +165,9 @@ namespace LibBSP
 		/// </summary>
 		public int PlaneIndex {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToInt32(Data, 16);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToInt32(Data, 8);
 				}
 
@@ -154,7 +176,9 @@ namespace LibBSP
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					bytes.CopyTo(Data, 16);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					bytes.CopyTo(Data, 8);
 				}
 			}
@@ -237,7 +261,9 @@ namespace LibBSP
 		/// <returns>The length, in <c>byte</c>s, of this struct.</returns>
 		/// <exception cref="ArgumentException">This struct is not valid or is not implemented for the given <paramref name="mapType"/> and <paramref name="lumpVersion"/>.</exception>
 		public static int GetStructLength(MapType mapType, int lumpVersion = 0) {
-			if (mapType.IsSubtypeOf(MapType.Source)) {
+			if (mapType == MapType.Source25) {
+				return 20;
+			} else if (mapType.IsSubtypeOf(MapType.Source)) {
 				return 12;
 			}
 

@@ -191,9 +191,13 @@ namespace LibBSP {
 		/// </summary>
 		Source23 = 0x10004000,
 		/// <summary>
+		/// Source Engine v25. Momentum Mod
+		/// </summary>
+		Source25 = 0x10008000,
+		/// <summary>
 		/// Source Engine v27. Contagion
 		/// </summary>
-		Source27 = 0x10008000,
+		Source27 = 0x10010000,
 
 		/// <summary>
 		/// rBSP v29. Titanfall

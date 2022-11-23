@@ -351,7 +351,7 @@ namespace LibBSP {
 							// 1347633750 reads in ASCII as "VBSP." Indicates Source engine.
 							// Some source games handle this as 2 shorts.
 							// TODO: Big endian?
-							// Formats: Source 17-23 and 27, DMoMaM, Vindictus
+							// Formats: Source 17-23, 25 and 27, DMoMaM, Vindictus
 							int num2 = (int)binaryReader.ReadUInt16();
 							switch (num2) {
 								case 17: {
@@ -415,6 +415,10 @@ namespace LibBSP {
 								}
 								case 23: {
 									current = MapType.Source23;
+									break;
+								}
+								case 25: {
+									current = MapType.Source25;
 									break;
 								}
 								case 27: {

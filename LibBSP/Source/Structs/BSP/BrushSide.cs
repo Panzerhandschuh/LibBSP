@@ -73,7 +73,8 @@ namespace LibBSP {
 					|| MapType == MapType.Nightfire) {
 					return BitConverter.ToInt32(Data, 4);
 				} else if (MapType.IsSubtypeOf(MapType.Quake3)
-					|| MapType == MapType.Vindictus) {
+					|| MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					return BitConverter.ToInt32(Data, 0);
 				} else if (MapType.IsSubtypeOf(MapType.Quake2)
 					|| MapType.IsSubtypeOf(MapType.Source)) {
@@ -89,7 +90,8 @@ namespace LibBSP {
 					|| MapType == MapType.Nightfire) {
 					bytes.CopyTo(Data, 4);
 				} else if (MapType.IsSubtypeOf(MapType.Quake3)
-					|| MapType == MapType.Vindictus) {
+					|| MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					bytes.CopyTo(Data, 0);
 				} else if (MapType.IsSubtypeOf(MapType.Quake2)
 					|| MapType.IsSubtypeOf(MapType.Source)) {
@@ -135,7 +137,8 @@ namespace LibBSP {
 				if (MapType == MapType.STEF2) {
 					return BitConverter.ToInt32(Data, 0);
 				} else if (MapType.IsSubtypeOf(MapType.Quake3)
-					|| MapType == MapType.Vindictus) {
+					|| MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					return BitConverter.ToInt32(Data, 4);
 				} else if (MapType.IsSubtypeOf(MapType.Quake2)
 					|| MapType.IsSubtypeOf(MapType.Source)) {
@@ -150,7 +153,8 @@ namespace LibBSP {
 				if (MapType == MapType.STEF2) {
 					bytes.CopyTo(Data, 0);
 				} else if (MapType.IsSubtypeOf(MapType.Quake3)
-					|| MapType == MapType.Vindictus) {
+					|| MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					bytes.CopyTo(Data, 4);
 				} else if (MapType.IsSubtypeOf(MapType.Quake2)
 					|| MapType.IsSubtypeOf(MapType.Source)) {
@@ -217,7 +221,8 @@ namespace LibBSP {
 		/// </summary>
 		public int DisplacementIndex {
 			get {
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					return BitConverter.ToInt32(Data, 8);
 				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToInt16(Data, 4);
@@ -228,7 +233,8 @@ namespace LibBSP {
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					bytes.CopyTo(Data, 8);
 				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					Data[4] = bytes[0];
@@ -242,7 +248,8 @@ namespace LibBSP {
 		/// </summary>
 		public bool IsBevel {
 			get {
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					return Data[12] > 0;
 				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return Data[6] > 0;
@@ -251,7 +258,8 @@ namespace LibBSP {
 				return false;
 			}
 			set {
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					Data[12] = (byte)(value ? 1 : 0);
 				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					Data[6] = (byte)(value ? 1 : 0);
@@ -264,14 +272,18 @@ namespace LibBSP {
 		/// </summary>
 		public bool IsThin {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source) && MapType != MapType.Vindictus) {
+				if (MapType == MapType.Source25) {
+					return Data[13] > 0;
+				} else if (MapType.IsSubtypeOf(MapType.Source) && MapType != MapType.Vindictus) {
 					return Data[7] > 0;
 				}
 
 				return false;
 			}
 			set {
-				if (MapType.IsSubtypeOf(MapType.Source) && MapType != MapType.Vindictus) {
+				if (MapType == MapType.Source25) {
+					Data[13] = (byte)(value ? 1 : 0);
+				} else if (MapType.IsSubtypeOf(MapType.Source) && MapType != MapType.Vindictus) {
 					Data[7] = (byte)(value ? 1 : 0);
 				}
 			}
@@ -355,7 +367,8 @@ namespace LibBSP {
 		/// <returns>The length, in <c>byte</c>s, of this struct.</returns>
 		/// <exception cref="ArgumentException">This struct is not valid or is not implemented for the given <paramref name="mapType"/> and <paramref name="lumpVersion"/>.</exception>
 		public static int GetStructLength(MapType type, int version = 0) {
-			if (type == MapType.Vindictus) {
+			if (type == MapType.Vindictus
+				|| type == MapType.Source25) {
 				return 16;
 			} else if (type.IsSubtypeOf(MapType.MOHAA)
 				|| type == MapType.Raven) {

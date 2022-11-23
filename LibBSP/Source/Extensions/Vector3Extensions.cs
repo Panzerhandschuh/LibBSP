@@ -220,7 +220,9 @@ namespace LibBSP {
 		/// <param name="type">The map type.</param>
 		/// <returns>Index for this lump, or -1 if the format doesn't have this lump.</returns>
 		public static int GetIndexForNormalsLump(MapType type) {
-			if (type == MapType.Nightfire) {
+			if (type.IsSubtypeOf(MapType.Source)) {
+				return 30;
+			} else if (type == MapType.Nightfire) {
 				return 5;
 			}
 

@@ -71,7 +71,8 @@ namespace LibBSP {
 		/// </summary>
 		public int FirstVertexIndex {
 			get {
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					return BitConverter.ToInt32(Data, 0);
 				} else if (MapType.IsSubtypeOf(MapType.Quake)
 					|| MapType.IsSubtypeOf(MapType.Quake2)
@@ -84,7 +85,8 @@ namespace LibBSP {
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					bytes.CopyTo(Data, 0);
 				} else if (MapType.IsSubtypeOf(MapType.Quake)
 					|| MapType.IsSubtypeOf(MapType.Quake2)
@@ -109,7 +111,8 @@ namespace LibBSP {
 		/// </summary>
 		public int SecondVertexIndex {
 			get {
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					return BitConverter.ToInt32(Data, 4);
 				} else if (MapType.IsSubtypeOf(MapType.Quake)
 					|| MapType.IsSubtypeOf(MapType.Quake2)
@@ -122,7 +125,8 @@ namespace LibBSP {
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType == MapType.Vindictus) {
+				if (MapType == MapType.Vindictus
+					|| MapType == MapType.Source25) {
 					BitConverter.GetBytes(value).CopyTo(Data, 4);
 				} else if (MapType.IsSubtypeOf(MapType.Quake)
 					|| MapType.IsSubtypeOf(MapType.Quake2)
@@ -207,7 +211,8 @@ namespace LibBSP {
 		/// <returns>The length, in <c>byte</c>s, of this struct.</returns>
 		/// <exception cref="ArgumentException">This struct is not valid or is not implemented for the given <paramref name="mapType"/> and <paramref name="lumpVersion"/>.</exception>
 		public static int GetStructLength(MapType mapType, int lumpVersion = 0) {
-			if (mapType == MapType.Vindictus) {
+			if (mapType == MapType.Vindictus
+				|| mapType == MapType.Source25) {
 				return 8;
 			} else if (mapType.IsSubtypeOf(MapType.Quake)
 				|| mapType.IsSubtypeOf(MapType.Quake2)

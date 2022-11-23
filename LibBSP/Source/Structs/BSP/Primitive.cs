@@ -95,7 +95,9 @@ namespace LibBSP {
 		/// </summary>
 		[Index("Indices")] public int FirstIndex {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToInt32(Data, 4);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToUInt16(Data, 2);
 				}
 
@@ -104,7 +106,9 @@ namespace LibBSP {
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					bytes.CopyTo(Data, 4);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					Data[2] = bytes[0];
 					Data[3] = bytes[1];
 				}
@@ -116,7 +120,9 @@ namespace LibBSP {
 		/// </summary>
 		[Count("Indices")] public int IndexCount {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToInt32(Data, 8);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToUInt16(Data, 4);
 				}
 
@@ -125,7 +131,9 @@ namespace LibBSP {
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					bytes.CopyTo(Data, 8);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					Data[4] = bytes[0];
 					Data[5] = bytes[1];
 				}
@@ -148,7 +156,9 @@ namespace LibBSP {
 		/// </summary>
 		[Index("Vertices")] public int FirstVertex {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToInt32(Data, 12);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToUInt16(Data, 6);
 				}
 
@@ -157,7 +167,9 @@ namespace LibBSP {
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					bytes.CopyTo(Data, 12);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					Data[6] = bytes[0];
 					Data[7] = bytes[1];
 				}
@@ -169,7 +181,9 @@ namespace LibBSP {
 		/// </summary>
 		[Count("Vertices")] public int VertexCount {
 			get {
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					return BitConverter.ToInt32(Data, 16);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					return BitConverter.ToUInt16(Data, 8);
 				}
 
@@ -178,7 +192,9 @@ namespace LibBSP {
 			set {
 				byte[] bytes = BitConverter.GetBytes(value);
 
-				if (MapType.IsSubtypeOf(MapType.Source)) {
+				if (MapType == MapType.Source25) {
+					bytes.CopyTo(Data, 16);
+				} else if (MapType.IsSubtypeOf(MapType.Source)) {
 					Data[8] = bytes[0];
 					Data[9] = bytes[1];
 				}
@@ -262,7 +278,9 @@ namespace LibBSP {
 		/// <returns>The length, in <c>byte</c>s, of this struct.</returns>
 		/// <exception cref="ArgumentException">This struct is not valid or is not implemented for the given <paramref name="mapType"/> and <paramref name="lumpVersion"/>.</exception>
 		public static int GetStructLength(MapType mapType, int lumpVersion = 0) {
-			if (mapType.IsSubtypeOf(MapType.Source)) {
+			if (mapType == MapType.Source25) {
+				return 20;
+			} else if (mapType.IsSubtypeOf(MapType.Source)) {
 				return 10; // Note: This is 10 bytes instead of 9 due to data structure alignment
 			}
 
