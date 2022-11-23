@@ -200,7 +200,7 @@ namespace LibBSP {
 		/// </summary>
 		/// <param name="data">The data to decompress.</param>
 		/// <returns>Decompressed data.</returns>
-		public byte[] Decompress(byte[] data) {
+		public static byte[] Decompress(byte[] data) {
 			List<byte> decompressed = new List<byte>();
 
 			for (int i = 0; i < data.Length; ++i) {
@@ -222,9 +222,8 @@ namespace LibBSP {
 		/// </summary>
 		/// <param name="data">The data to compress.</param>
 		/// <returns>Compressed data.</returns>
-		public byte[] Compress(byte[] data) {
-			byte[] compressed = new byte[data.Length];
-			int writeOffset = 0;
+		public static byte[] Compress(byte[] data) {
+			List<byte> compressed = new List<byte>();
 
 			uint zeroCount = 0;
 			for (int i = 0; i < data.Length; ++i) {
@@ -235,23 +234,23 @@ namespace LibBSP {
 				if (data[i] != 0 || i == data.Length - 1) {
 					if (zeroCount > 0) {
 						while (zeroCount > byte.MaxValue) {
-							compressed[writeOffset++] = 0;
-							compressed[writeOffset++] = byte.MaxValue;
+							compressed.Add(0);
+							compressed.Add(byte.MaxValue);
 							zeroCount -= byte.MaxValue;
 						}
-						compressed[writeOffset++] = 0;
-						compressed[writeOffset++] = (byte)zeroCount;
+						compressed.Add(0);
+						compressed.Add((byte)zeroCount);
 						zeroCount = 0;
 					}
 
 					if (i < data.Length && data[i] != 0) {
-						compressed[writeOffset++] = data[i];
+						compressed.Add(data[i]);
 					}
 				}
 			}
 
-			byte[] output = new byte[writeOffset];
-			Array.Copy(compressed, 0, output, 0, writeOffset);
+			byte[] output = new byte[compressed.Count];
+			compressed.CopyTo(output);
 			return output;
 		}
 
