@@ -33,10 +33,22 @@ namespace LibBSP {
 			Int64 = 7,
 		}
 
+		private List<long> numList = new List<long>();
+		private bool isDirty = false;
+		private byte[] data;
+
 		/// <summary>
 		/// Array of <c>byte</c>s used as the data source for this <see cref="NumList"/>.
 		/// </summary>
-		public byte[] Data { get; private set; }
+		public byte[] Data {
+			get {
+				UpdateNumListData();
+				return data;
+			}
+			private set {
+				data = value;
+			}
+		}
 
 		/// <summary>
 		/// Gets the length of this lump in bytes.
@@ -407,15 +419,13 @@ namespace LibBSP {
 
 		#region ICollection
 		public void Add(long value) {
-			byte[] temp = new byte[Data.Length + StructLength];
-			Array.Copy(Data, 0, temp, 0, Data.Length);
-			byte[] bytes = BitConverter.GetBytes(value);
-			Array.Copy(bytes, 0, temp, Data.Length, StructLength);
-			Data = temp;
+			numList.Add(value);
+			isDirty = true;
 		}
 
 		public void Clear() {
-			Data = new byte[0];
+			numList.Clear();
+			isDirty = true;
 		}
 
 		public bool Contains(long value) {
@@ -469,7 +479,9 @@ namespace LibBSP {
 		}
 
 		public bool IsSynchronized {
-			get { return Data.IsSynchronized; }
+			get {
+				return Data.IsSynchronized;
+			}
 		}
 		#endregion
 
@@ -553,19 +565,13 @@ namespace LibBSP {
 		}
 
 		public void Insert(int index, long value) {
-			byte[] temp = new byte[Data.Length + StructLength];
-			Array.Copy(Data, 0, temp, 0, StructLength * index);
-			byte[] bytes = BitConverter.GetBytes(value);
-			Array.Copy(bytes, 0, temp, StructLength * index, StructLength);
-			Array.Copy(Data, StructLength * index, temp, StructLength * (index + 1), Data.Length - StructLength * index);
-			Data = temp;
+			numList.Insert(index, value);
+			isDirty = true;
 		}
 
 		public void RemoveAt(int index) {
-			byte[] temp = new byte[Data.Length - StructLength];
-			Array.Copy(Data, 0, temp, 0, StructLength * index);
-			Array.Copy(Data, StructLength * (index + 1), temp, StructLength * index, Data.Length - (StructLength * (index + 1)));
-			Data = temp;
+			numList.RemoveAt(index);
+			isDirty = true;
 		}
 
 		public long this[int index] {
@@ -604,10 +610,17 @@ namespace LibBSP {
 		#endregion
 
 		/// <summary>
-		/// Removes all items from the list.
+		/// Updates the Data byte array if the numList has updated
 		/// </summary>
-		public void RemoveAll() {
-			Data = new byte[0];
+		private void UpdateNumListData() {
+			if (isDirty) { // Update Data using numList
+				data = new byte[numList.Count * StructLength];
+				for (int i = 0; i < numList.Count; ++i) {
+					Array.Copy(BitConverter.GetBytes(numList[i]), 0, data, i * StructLength, StructLength);
+				}
+
+				isDirty = false;
+			}
 		}
 	}
 }
