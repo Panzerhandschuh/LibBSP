@@ -33,29 +33,14 @@ namespace LibBSP {
 			Int64 = 7,
 		}
 
-		private List<long> numList = new List<long>();
-		private bool isDirty = false;
-		private byte[] data;
-
-		/// <summary>
-		/// Array of <c>byte</c>s used as the data source for this <see cref="NumList"/>.
-		/// </summary>
-		public byte[] Data {
-			get {
-				UpdateNumListData();
-				return data;
-			}
-			private set {
-				data = value;
-			}
-		}
+		private List<long> numList;
 
 		/// <summary>
 		/// Gets the length of this lump in bytes.
 		/// </summary>
 		public int Length {
 			get {
-				return Data.Length;
+				return numList.Count * StructLength;
 			}
 		}
 
@@ -79,8 +64,35 @@ namespace LibBSP {
 
 			Bsp = bsp;
 			LumpInfo = lumpInfo;
-			Data = data;
 			Type = type;
+
+			numList = new List<long>(data.Length / StructLength);
+			for (int i = 0; i < data.Length; i += StructLength) {
+				switch (Type)
+				{
+					case DataType.SByte:
+						numList.Add((sbyte)data[i]);
+						break;
+					case DataType.Byte:
+						numList.Add(data[i]);
+						break;
+					case DataType.Int16:
+						numList.Add(BitConverter.ToInt16(data, i));
+						break;
+					case DataType.UInt16:
+						numList.Add(BitConverter.ToUInt16(data, i));
+						break;
+					case DataType.Int32:
+						numList.Add(BitConverter.ToInt32(data, i));
+						break;
+					case DataType.UInt32:
+						numList.Add(BitConverter.ToUInt32(data, i));
+						break;
+					case DataType.Int64:
+						numList.Add(BitConverter.ToInt64(data, i));
+						break;
+				}
+			}
 		}
 
 		/// <summary>
@@ -95,7 +107,7 @@ namespace LibBSP {
 			Bsp = bsp;
 			LumpInfo = lumpInfo;
 			Type = type;
-			Data = new byte[original.Count * StructLength];
+			numList = new List<long>(original.Count);
 			for (int i = 0; i < original.Count; ++i) {
 				this[i] = original[i];
 			}
@@ -110,7 +122,7 @@ namespace LibBSP {
 		public NumList(DataType type, BSP bsp = null, LumpInfo lumpInfo = default(LumpInfo)) {
 			Bsp = bsp;
 			Type = type;
-			Data = new byte[0];
+			numList = new List<long>();
 		}
 
 		/// <summary>
@@ -158,7 +170,12 @@ namespace LibBSP {
 		/// </summary>
 		/// <returns>The data.</returns>
 		public byte[] GetBytes() {
-			return Data;
+			var data = new byte[numList.Count * StructLength];
+			for (int i = 0; i < numList.Count; i++) {
+				Array.Copy(BitConverter.GetBytes(numList[i]), 0, data, i * StructLength, StructLength);
+			}
+			
+			return data;
 		}
 
 		#region IndicesForLumps
@@ -420,12 +437,10 @@ namespace LibBSP {
 		#region ICollection
 		public void Add(long value) {
 			numList.Add(value);
-			isDirty = true;
 		}
 
 		public void Clear() {
 			numList.Clear();
-			isDirty = true;
 		}
 
 		public bool Contains(long value) {
@@ -462,7 +477,7 @@ namespace LibBSP {
 
 		public int Count {
 			get {
-				return Data.Length / StructLength;
+				return numList.Count;
 			}
 		}
 
@@ -474,13 +489,13 @@ namespace LibBSP {
 
 		public object SyncRoot {
 			get {
-				return Data.SyncRoot;
+				return ((ICollection)numList).SyncRoot;
 			}
 		}
 
 		public bool IsSynchronized {
 			get {
-				return Data.IsSynchronized;
+				return ((ICollection)numList).IsSynchronized;
 			}
 		}
 		#endregion
@@ -566,61 +581,20 @@ namespace LibBSP {
 
 		public void Insert(int index, long value) {
 			numList.Insert(index, value);
-			isDirty = true;
 		}
 
 		public void RemoveAt(int index) {
 			numList.RemoveAt(index);
-			isDirty = true;
 		}
 
 		public long this[int index] {
 			get {
-				switch (Type) {
-					case DataType.SByte: {
-						return (sbyte)Data[index];
-					}
-					case DataType.Byte: {
-						return Data[index];
-					}
-					case DataType.Int16: {
-						return BitConverter.ToInt16(Data, index * 2);
-					}
-					case DataType.UInt16: {
-						return BitConverter.ToUInt16(Data, index * 2);
-					}
-					case DataType.Int32: {
-						return BitConverter.ToInt32(Data, index * 4);
-					}
-					case DataType.UInt32: {
-						return BitConverter.ToUInt32(Data, index * 4);
-					}
-					case DataType.Int64: {
-						return BitConverter.ToInt64(Data, index * 8);
-					}
-					default: {
-						return 0;
-					}
-				}
+				return numList[index];
 			}
 			set {
-				Array.Copy(BitConverter.GetBytes(value), 0, Data, index * StructLength, StructLength);
+				numList[index] = value;
 			}
 		}
 		#endregion
-
-		/// <summary>
-		/// Updates the Data byte array if the numList has updated
-		/// </summary>
-		private void UpdateNumListData() {
-			if (isDirty) { // Update Data using numList
-				data = new byte[numList.Count * StructLength];
-				for (int i = 0; i < numList.Count; ++i) {
-					Array.Copy(BitConverter.GetBytes(numList[i]), 0, data, i * StructLength, StructLength);
-				}
-
-				isDirty = false;
-			}
-		}
 	}
 }
