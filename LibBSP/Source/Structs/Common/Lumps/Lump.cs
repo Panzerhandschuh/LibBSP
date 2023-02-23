@@ -45,7 +45,7 @@ namespace LibBSP {
 		/// <summary>
 		/// The <see cref="LibBSP.LumpInfo"/> associated with this <see cref="Lump{T}"/>.
 		/// </summary>
-		public LumpInfo LumpInfo { get; protected set; }
+		public LumpInfo LumpInfo { get; set; }
 
 		/// <summary>
 		/// Gets the length of this lump in bytes.

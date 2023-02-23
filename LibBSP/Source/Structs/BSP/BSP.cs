@@ -1195,6 +1195,42 @@ namespace LibBSP {
 		}
 
 		/// <summary>
+		/// A <see cref="Lump{LibBSP.WorldLight}"/> of <see cref="WorldLight"/> objects in the BSP file, if available.
+		/// </summary>
+		public Lump<WorldLight> WorldLights {
+			get {
+				int index = WorldLight.GetIndexForLump(MapType);
+
+				if (index >= 0) {
+					if (!_lumps.ContainsKey(index)) {
+						_lumps.Add(index, WorldLight.LumpFactory(Reader.ReadLump(this[index]), this, this[index]));
+					}
+
+					return (Lump<WorldLight>)_lumps[index];
+				}
+
+				return null;
+			}
+			set {
+				int index = WorldLight.GetIndexForLump(MapType);
+				if (index >= 0) {
+					_lumps[index] = value;
+					value.Bsp = this;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Has the <see cref="WorldLight"/> lump been loaded yet?
+		/// </summary>
+		public bool WorldLightsLoaded {
+			get {
+				int index = WorldLight.GetIndexForLump(MapType);
+				return LumpLoaded(index);
+			}
+		}
+
+		/// <summary>
 		/// A <see cref="NumList"/> object containing the Leaf Faces lump, if available.
 		/// </summary>
 		public NumList LeafFaces {
@@ -1859,6 +1895,31 @@ namespace LibBSP {
 		public bool StaticPropsLoaded {
 			get {
 				return GameLumpLoaded && GameLump.StaticPropsLoaded;
+			}
+		}
+
+        /// <summary>
+        /// The <see cref="LibBSP.PrimitiveTextureInfo"/> objects in the BSP file extracted from the <see cref="BSP.gameLump"/>, if available.
+        /// </summary>
+        public Lump<PrimitiveTextureInfo> PrimitiveTextureInfo {
+			get {
+				if (GameLump != null) {
+					return GameLump.PrimitiveTextureInfo;
+				}
+
+				return null;
+			}
+			set {
+				GameLump.PrimitiveTextureInfo = value;
+			}
+		}
+
+		/// <summary>
+		/// Has the Primitive Texture Infos lump been loaded yet?
+		/// </summary>
+		public bool PrimitiveTextureInfoLoaded {
+			get {
+				return GameLumpLoaded && GameLump.PrimitiveTextureInfoLoaded;
 			}
 		}
 

@@ -17,7 +17,7 @@ namespace LibBSP {
 		/// <summary>
 		/// The <see cref="LumpInfo"/> associated with this <see cref="ILump"/>.
 		/// </summary>
-		public LumpInfo LumpInfo { get; protected set; }
+		public LumpInfo LumpInfo { get; set; }
 
 		/// <summary>
 		/// Enum of the types that may be used in this class.

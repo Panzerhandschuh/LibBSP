@@ -15,6 +15,8 @@ namespace LibBSP {
 		prpd = 1685090928,
 		/// <summary> <see cref="StaticProps"/>. </summary>
 		prps = 1936749168,
+		/// <summary> Primitive vertex texture info. </summary>
+		pmti = 1886221417,
 	}
 
 	/// <summary>
@@ -33,7 +35,7 @@ namespace LibBSP {
 		/// <summary>
 		/// The <see cref="LibBSP.LumpInfo"/> associated with this <see cref="ILump"/>.
 		/// </summary>
-		public LumpInfo LumpInfo { get; protected set; }
+		public LumpInfo LumpInfo { get; set; }
 
 		/// <summary>
 		/// Gets the length of this lump in bytes.
@@ -209,6 +211,38 @@ namespace LibBSP {
 		public bool StaticPropsLoaded {
 			get {
 				return LumpLoaded(GameLumpType.prps);
+			}
+		}
+		
+		/// <summary>
+		/// The <see cref="LibBSP.PrimitiveTextureInfo"/> objects in the BSP file extracted from this lump, if available.
+		/// </summary>
+		public Lump<PrimitiveTextureInfo> PrimitiveTextureInfo {
+			get {
+				GameLumpType type = GameLumpType.pmti;
+
+				if (ContainsKey(type)) {
+					if (!_lumps.ContainsKey(type)) {
+                        _lumps.Add(type, LibBSP.PrimitiveTextureInfo.LumpFactory(ReadLump(this[type]), Bsp, this[type]));
+					}
+
+					return (Lump<PrimitiveTextureInfo>)_lumps[type];
+				}
+
+				return null;
+			}
+			set {
+				_lumps[GameLumpType.pmti] = value;
+				value.Bsp = Bsp;
+			}
+		}
+
+		/// <summary>
+		/// Has the Primitive Texture Info lump been loaded yet?
+		/// </summary>
+		public bool PrimitiveTextureInfoLoaded {
+			get {
+				return LumpLoaded(GameLumpType.pmti);
 			}
 		}
 

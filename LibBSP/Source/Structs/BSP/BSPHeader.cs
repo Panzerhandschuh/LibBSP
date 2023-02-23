@@ -163,6 +163,11 @@ namespace LibBSP {
 							lumpLength = lump.Length;
 							lumpVersion = Bsp[i].version;
 							lumpIdent = Bsp[i].ident;
+
+							// Update lump offset
+							var lumpInfo = lump.LumpInfo;
+							lumpInfo.offset = lumpOffset;
+							lump.LumpInfo = lumpInfo;
 						} else {
 							// If the lump is not loaded, it has not changed. Use original length.
 							LumpInfo lumpInfo = GetLumpInfo(i);

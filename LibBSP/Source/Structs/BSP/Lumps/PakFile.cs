@@ -18,7 +18,7 @@ namespace LibBSP {
 		/// <summary>
 		/// The <see cref="LibBSP.LumpInfo"/> associated with this <see cref="ILump"/>.
 		/// </summary>
-		public LumpInfo LumpInfo { get; protected set; }
+		public LumpInfo LumpInfo { get; set; }
 
 		/// <summary>
 		/// Array of <c>byte</c>s used as the data source for face id info.

@@ -13,7 +13,7 @@ namespace LibBSP {
 		/// <summary>
 		/// The <see cref="LibBSP.LumpInfo"/> associated with this <see cref="ILump"/>.
 		/// </summary>
-		LumpInfo LumpInfo { get; }
+		LumpInfo LumpInfo { get; set; }
 
 		/// <summary>
 		/// Gets the length of this lump in bytes.
