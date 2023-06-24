@@ -166,8 +166,7 @@ namespace LibBSP {
 		/// </summary>
 		[Count("DisplacementTriangles")] public int NumTriangles {
 			get {
-				int side = Power * Power;
-				return 2 * side * side;
+				return (1 << (Power)) * (1 << (Power)) * 2;
 			}
 		}
 
